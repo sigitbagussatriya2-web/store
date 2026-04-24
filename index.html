@@ -159,7 +159,6 @@
             const namaLower = p.nama.toLowerCase();
             let badge = p.status === 'promo' ? '<div class="status-badge badge-promo">PROMO 🔥</div>' : (p.status === 'grosir' ? '<div class="status-badge badge-grosir">GROSIR 📦</div>' : '');
             
-            // --- LOGIKA SAFETY BADGE OTOMATIS ---
             let safetyText = namaLower.includes("akun") ? "Anti HB, Aman 100%" : (namaLower.includes("script") ? "Anti Ban, Aman 100%" : "Aman 100% & Terpercaya");
 
             list.innerHTML += `
@@ -232,13 +231,45 @@
     }
     function openRating(i) { selectedIdx = i; setStar(5); document.getElementById("ratingModal").style.display = "flex"; }
     function setStar(n) { currentStars = n; document.querySelectorAll("#starSelect i").forEach((s, i) => s.classList.toggle("active", i < n)); }
+    
+    // --- PERBAIKAN FUNGSI SUBMIT RATING (ANTI-BUG) ---
     function submitRating() {
+        const nameVal = document.getElementById("reviewerName").value.trim();
+        const textVal = document.getElementById("reviewerText").value.trim();
+        
+        if (!nameVal || !textVal) {
+            alert("Nama dan ulasan harus diisi ya bro!");
+            return;
+        }
+
         const p = products[selectedIdx];
-        p.reviews.push({ name: document.getElementById("reviewerName").value || "Anonim", text: document.getElementById("reviewerText").value || "Bagus!", stars: currentStars });
-        p.rCount++;
-        p.rating = ((p.rating * (p.rCount-1)) + currentStars) / p.rCount;
-        saveAndRefresh(); closeRating();
+        
+        // Inisialisasi jika reviews belum ada
+        if (!p.reviews) p.reviews = [];
+        
+        // Tambah review baru
+        p.reviews.push({ 
+            name: nameVal, 
+            text: textVal, 
+            stars: currentStars 
+        });
+        
+        // Update total ulasan & perhitungan rating
+        p.rCount = (p.rCount || 0) + 1;
+        p.rating = (((p.rating || 5) * (p.rCount - 1)) + currentStars) / p.rCount;
+        
+        // Simpan & Tutup
+        saveAndRefresh(); 
+        
+        // Reset form
+        document.getElementById("reviewerName").value = "";
+        document.getElementById("reviewerText").value = "";
+        
+        closeRating();
+        alert("Mantap! Ulasan kamu sudah terkirim.");
     }
+    // ------------------------------------------------
+
     function saveAndRefresh() { localStorage.setItem('garou_db_final', JSON.stringify(products)); renderProducts(); }
     function openCheckout(i) { selectedIdx = i; document.getElementById("modalTitle").innerText = products[i].nama; document.getElementById("modalImg").src = products[i].img; document.getElementById("btnTransfer").style.display = "flex"; document.getElementById("confirmBox").style.display = "none"; document.getElementById("danaModal").style.display = "flex"; }
     function showConfirm() { document.getElementById("btnTransfer").style.display = "none"; document.getElementById("confirmBox").style.display = "block"; }
