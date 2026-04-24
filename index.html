@@ -3,257 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garou Store | Blox Fruit Market</title>
+    <title>Garou Store | Ultimate Edition</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --blue: #00a3ff;
-            --bg: #05050a;
-            --card-bg: #0f0f1a;
-            --dana: #0076e0;
-        }
-
+        :root { --blue: #00a3ff; --bg: #05050a; --card-bg: #0f0f1a; --dana: #0076e0; --green: #25d366; --red: #ff4b2b; }
+        * { user-select: none; box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; overflow-x: hidden; }
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
 
-        /* Navigation */
-        nav { display: flex; justify-content: center; padding: 20px; background: #000; border-bottom: 2px solid var(--blue); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-weight: 900; font-size: 1.5rem; color: var(--blue); text-shadow: 0 0 15px var(--blue); letter-spacing: 2px; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--blue); position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px); }
+        .logo { font-weight: 900; font-size: 1.4rem; color: var(--blue); text-shadow: 0 0 15px var(--blue); letter-spacing: 2px; cursor: pointer; z-index: 1001; }
+        
+        .admin-status { display: flex; align-items: center; gap: 8px; font-size: 11px; background: rgba(37, 211, 102, 0.1); padding: 6px 15px; border-radius: 20px; border: 1px solid var(--green); font-weight: bold; }
+        .pulse-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); } 70% { box-shadow: 0 0 0 8px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
 
-        /* Hero Section */
-        .hero { text-align: center; padding: 60px 20px; background: radial-gradient(circle at center, #1a0033 0%, var(--bg) 80%); }
-        .hero h1 { font-size: 2.2rem; margin-bottom: 10px; text-shadow: 0 0 10px var(--blue); }
-        .hero input { width: 90%; max-width: 400px; padding: 14px 25px; border-radius: 25px; border: 1px solid #333; background: #111; color: white; outline: none; transition: 0.3s; margin-top: 20px; font-size: 16px; }
-        .hero input:focus { border-color: var(--blue); box-shadow: 0 0 15px var(--blue); }
+        .hero { text-align: center; padding: 40px 20px; position: relative; z-index: 2; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 5px; text-shadow: 0 0 20px var(--blue); }
+        .search-container { max-width: 450px; margin: 20px auto; }
+        .search-container input { width: 100%; padding: 15px 25px; border-radius: 30px; border: 1px solid #222; background: rgba(17,17,17,0.9); color: white; transition: 0.3s; }
 
-        /* Grid System */
-        .container { padding: 40px 5%; min-height: 50vh; }
+        .container { padding: 20px 5% 60px; position: relative; z-index: 2; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .card { background: var(--card-bg); border-radius: 15px; border: 1px solid #1a1a2e; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; }
-        .card:hover { transform: translateY(-10px); border-color: var(--blue); box-shadow: 0 0 20px rgba(0, 163, 255, 0.2); }
         
-        .card-img { height: 220px; background-size: cover; background-position: center; position: relative; background-color: #111; }
-        .stok-badge { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.85); padding: 5px 12px; border-radius: 20px; font-size: 12px; border: 1px solid var(--blue); }
-        .status { position: absolute; top: 10px; right: 10px; padding: 4px 12px; border-radius: 5px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
-        .status.ready { background: #00ff00; color: #000; }
-        .status.sold-out { background: #ff0000; color: white; }
+        .card { background: var(--card-bg); border-radius: 18px; border: 1px solid #1a1a2e; overflow: hidden; transition: 0.4s; display: flex; flex-direction: column; }
+        .card:hover { transform: translateY(-10px); border-color: var(--blue); box-shadow: 0 12px 30px rgba(0, 163, 255, 0.2); }
         
-        .card-info { padding: 20px; flex-grow: 1; }
-        .price { font-size: 1.8rem; color: var(--blue); font-weight: bold; margin: 10px 0; }
-        .specs { list-style: none; padding: 0; font-size: 14px; color: #ccc; margin-bottom: 20px; min-height: 80px; }
+        .card-img { height: 210px; background-size: cover; background-position: center; position: relative; background-color: #111; }
+        .stok-badge { position: absolute; bottom: 12px; left: 12px; background: rgba(0,0,0,0.8); padding: 6px 14px; border-radius: 20px; font-size: 11px; border: 1px solid var(--blue); color: var(--blue); font-weight: bold; }
+        
+        .card-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .price { font-size: 1.8rem; color: var(--blue); font-weight: 900; margin: 10px 0; }
+        .specs { list-style: none; padding: 0; font-size: 13px; color: #aaa; margin-bottom: 20px; flex-grow: 1; }
         .specs li { margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
-        .specs i { color: var(--blue); font-size: 12px; }
 
-        /* Buttons */
-        .btn { padding: 14px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; transition: 0.2s; font-size: 14px; width: 100%; box-sizing: border-box; }
-        .btn-wa { background: #25d366; color: white; }
-        .btn-dana { background: white; color: var(--dana); }
-        .btn:active { transform: scale(0.98); }
-        .btn:disabled { background: #222 !important; color: #555 !important; cursor: not-allowed; border: 1px solid #333; }
+        .btn { padding: 15px; border-radius: 12px; border: none; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
+        .btn-buy { background: white; color: var(--dana); }
+        .btn:disabled { background: #222 !important; color: #555 !important; cursor: not-allowed; }
 
-        /* Modal Overlay */
-        #danaModal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
-        .modal-content { background: #111; padding: 25px; border-radius: 20px; text-align: center; border: 1px solid var(--blue); max-width: 380px; width: 100%; position: relative; }
-        .modal-poster { width: 100%; max-height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; border: 1px solid #333; }
-        .num-box { background: #1a1a2e; padding: 15px; border-radius: 10px; margin: 15px 0; font-size: 1.4rem; border: 1px dashed var(--blue); cursor: pointer; color: var(--blue); font-weight: bold; transition: 0.2s; }
-        .num-box:hover { background: #22223d; }
-        .step-box { display: none; flex-direction: column; gap: 12px; }
+        #danaModal, #adminModal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(10px); }
+        .modal-content { background: #0f0f1a; padding: 25px; border-radius: 25px; text-align: center; border: 1px solid var(--blue); max-width: 400px; width: 100%; max-height: 90vh; overflow-y: auto; }
         
-        /* Rating Section */
-        .rating-section { padding: 50px 5%; background: #080810; text-align: center; border-top: 1px solid #111; }
-        .rating-input-card { background: #111; padding: 25px; border-radius: 15px; border: 1px dashed var(--blue); max-width: 500px; margin: 0 auto 30px; }
-        .stars { display: flex; justify-content: center; gap: 5px; flex-direction: row-reverse; margin-bottom: 15px; }
-        .stars input { display: none; }
-        .stars label { font-size: 35px; color: #333; cursor: pointer; transition: 0.2s; }
-        .stars label:hover, .stars label:hover ~ label, .stars input:checked ~ label { color: #ffcc00; }
-        textarea { width: 100%; background: #000; border: 1px solid #333; color: white; padding: 12px; border-radius: 8px; resize: none; box-sizing: border-box; outline: none; font-family: inherit; }
-        
-        .live-reviews { display: grid; gap: 15px; max-width: 800px; margin: 0 auto; text-align: left; }
-        .review-card { background: #0f0f1a; padding: 15px; border-radius: 10px; border-left: 4px solid var(--blue); }
+        .num-box { background: #000; padding: 20px; border-radius: 15px; margin: 20px 0; font-size: 1.5rem; border: 2px dashed var(--blue); cursor: pointer; color: var(--blue); font-weight: 900; }
+        .admin-input { background: #000; border: 1px solid #333; color: white; padding: 12px; border-radius: 8px; width: 100%; margin-bottom: 10px; font-size: 14px; }
+        .admin-group { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; margin-bottom: 15px; text-align: left; border: 1px solid #222; }
 
-        footer { text-align: center; padding: 40px; color: #444; font-size: 13px; border-top: 1px solid #111; }
+        .notif { position: fixed; bottom: -100px; left: 20px; background: #0a0a0f; border: 1px solid var(--blue); padding: 12px 20px; border-radius: 12px; display: flex; align-items: center; gap: 15px; z-index: 5000; transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .notif.show { bottom: 30px; }
+
+        .float-wa { position: fixed; bottom: 30px; right: 30px; background: var(--green); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; color: white; box-shadow: 0 10px 25px rgba(37,211,102,0.4); z-index: 1000; cursor: pointer; }
+        footer { text-align: center; padding: 40px; color: #333; font-size: 11px; }
     </style>
 </head>
 <body>
 
-<nav><div class="logo">GAROU STORE</div></nav>
+<div id="particles-js"></div>
+
+<nav>
+    <div class="logo" onclick="loginAdmin()">GAROU STORE</div>
+    <div class="admin-status"><div class="pulse-dot"></div><span>ADMIN ONLINE</span></div>
+</nav>
 
 <section class="hero">
-    <h1>BLOX FRUIT MARKET 🔥</h1>
-    <p style="color: #888;">Jual Akun & Script Blox Fruit Aman & Terpercaya</p>
-    <input type="text" id="search" placeholder="Cari produk..." onkeyup="searchProduct()">
+    <h1>GAROU STORE 🔥</h1>
+    <p>Premium Blox Fruit Accounts & High-Performance Scripts</p>
+    <div class="search-container"><input type="text" id="search" placeholder="Cari barang..." onkeyup="searchProduct()"></div>
 </section>
 
 <div class="container">
     <div class="grid" id="productList"></div>
 </div>
 
-<section class="rating-section">
-    <h2>Rating & Testimoni ⭐</h2>
-    <div class="rating-input-card">
-        <div class="stars">
-            <input type="radio" name="star" id="star5" value="5"><label for="star5">★</label>
-            <input type="radio" name="star" id="star4" value="4"><label for="star4">★</label>
-            <input type="radio" name="star" id="star3" value="3"><label for="star3">★</label>
-            <input type="radio" name="star" id="star2" value="2"><label for="star2">★</label>
-            <input type="radio" name="star" id="star1" value="1"><label for="star1">★</label>
-        </div>
-        <textarea id="reviewText" rows="3" placeholder="Gimana belanja di Garou Store? Kasih tahu yang lain!"></textarea>
-        <button class="btn btn-wa" style="margin-top:15px;" onclick="addReview()">
-            <i class="fas fa-paper-plane"></i> Posting Testimoni
-        </button>
-    </div>
-    <div class="live-reviews" id="reviewContainer"></div>
-</section>
+<div class="notif" id="fakeNotif"><i class="fas fa-shopping-cart" style="color:var(--green)"></i><span id="notifText" style="font-size:12px;">Seseorang membeli Akun!</span></div>
 
-<div id="danaModal" onclick="closeModal()">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <img id="modalImg" src="store1.jpg" alt="Produk" class="modal-poster">
-        <h3 id="modalTitle" style="margin: 0 0 15px; color: var(--blue);">Detail Pesanan</h3>
-        
-        <div id="step1" class="step-box" style="display:flex;">
-            <p style="font-size:14px; color:#ccc; margin-bottom:5px;">Silahkan Transfer ke DANA:</p>
-            <div class="num-box" onclick="copyNum()">081469870881</div>
-            <p style="font-size:11px; color:#888;">(Klik nomor untuk menyalin)</p>
-            <button class="btn btn-wa" style="background:var(--blue);" onclick="goToStep2()">Saya Sudah Transfer</button>
-        </div>
+<div class="float-wa" onclick="window.open('https://wa.me/6281469870881', '_blank')"><i class="fab fa-whatsapp"></i></div>
 
-        <div id="step2" class="step-box">
-            <p style="font-size:14px; color:#ccc;">Wajib kirim bukti transfer ke Admin untuk klaim produk.</p>
-            <button class="btn btn-wa" onclick="openWA()">
-                <i class="fab fa-whatsapp"></i> Hubungi Admin di WA
-            </button>
-            <button class="btn" id="doneBtn" onclick="location.reload()" disabled style="background:#ffcc00; color:#000; margin-top:10px;">
-                Selesai & Keluar
-            </button>
-        </div>
+<div id="danaModal">
+    <div class="modal-content">
+        <img id="modalImg" src="" style="width:100%; height: 180px; object-fit: cover; border-radius:15px; margin-bottom:20px; border:1px solid #222;">
+        <h3 id="modalTitle" style="color:var(--blue); margin:0;">Checkout</h3>
+        <p style="font-size:13px; color:#666; margin:10px 0;">Transfer DANA ke:</p>
+        <div class="num-box" onclick="copyNum()">081469870881</div>
+        <button class="btn" style="background: var(--green); color: white; width:100%" onclick="processPayment()">SUDAH TRANSFER</button>
+        <p onclick="closeModal()" style="margin-top:20px; font-size:12px; color:#444; cursor:pointer;">BATALKAN</p>
     </div>
 </div>
 
-<footer>© 2026 Garou Store | @garoustore 😎</footer>
+<div id="adminModal">
+    <div class="modal-content">
+        <h2 style="color:var(--blue); margin-bottom:20px;">OWNER CONTROL</h2>
+        <div id="adminList"></div>
+        <hr style="border:0; border-top:1px solid #222; margin:20px 0;">
+        <h3 style="font-size:14px; text-align:left; color:var(--blue);">+ TAMBAH PRODUK BARU</h3>
+        <input type="text" id="newNama" placeholder="Nama Produk" class="admin-input">
+        <input type="text" id="newHarga" placeholder="Harga (ex: 10.000)" class="admin-input">
+        <input type="number" id="newStok" placeholder="Jumlah Stok" class="admin-input">
+        <input type="text" id="newImg" placeholder="Nama File Gambar (ex: store1.png)" class="admin-input">
+        <input type="text" id="newDesc" placeholder="Deskripsi (Pisah dengan koma)" class="admin-input">
+        <button class="btn" style="background:var(--green); color:white; width:100%; margin-bottom:10px;" onclick="addNewProduct()">TAMBAHKAN PRODUK</button>
+        <button class="btn" style="background: var(--blue); color: white; width:100%" onclick="saveAdminChanges()">SIMPAN SEMUA PERUBAHAN</button>
+        <p onclick="closeAdmin()" style="margin-top:20px; font-size:12px; color:#444; cursor:pointer;">KELUAR PANEL</p>
+    </div>
+</div>
 
+<footer>© 2026 GAROU STORE | @garoustore</footer>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 <script>
-    // DATA PRODUK (Pastikan file store1.jpg dan store2.jpg ada di folder yang sama)
-    const dataProduk = [
-        { 
-            id: 0,
-            nama: "Akun Blox Fruit Lv 1000", 
-            harga: "7.000", 
-            img: "store1.png", 
-            desc: ["Fruit: Pain, Magma", "Aman 100% Anti HB", "Full Akses Akun"], 
-            stok: 2 
-        },
-        { 
-            id: 1,
-            nama: "Script Blox Fruit", 
-            harga: "2.500", 
-            img: "store2.jpg", 
-            desc: ["Auto Farm Level", "Auto Raid & Chest", "Anti-Ban / Safe Script"], 
-            stok: 10 
-        }
+    // Inisialisasi Partikel
+    particlesJS("particles-js", { "particles": { "number": { "value": 40 }, "color": { "value": "#00a3ff" }, "shape": { "type": "circle" }, "opacity": { "value": 0.2 }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#00a3ff", "opacity": 0.1, "width": 1 }, "move": { "enable": true, "speed": 1 } } });
+
+    // Database Awal
+    const initialData = [
+        { id: 1713950000001, nama: "Akun Blox Fruit Lv 1000", harga: "7.000", img: "store1.png", desc: ["Fruit: Pain, Magma", "Anti HB 100% Aman", "Full Akses Akun"], stok: 5 },
+        { id: 1713950000002, nama: "Script Blox Fruit Premium", harga: "2.500", img: "store2.jpg", desc: ["Auto Farm Level", "Auto Raid & Chest", "No Key System"], stok: 10 }
     ];
 
-    let currentItem = {};
+    let products = JSON.parse(localStorage.getItem('garou_ultimate_db')) || initialData;
+    let selectedIdx = -1;
 
-    // Inisialisasi Produk
-    function displayProducts() {
+    function renderProducts() {
         const list = document.getElementById("productList");
         list.innerHTML = "";
-        dataProduk.forEach(p => {
-            const isSold = p.stok <= 0;
+        products.forEach((p, index) => {
+            const isHabis = p.stok <= 0;
             list.innerHTML += `
                 <div class="card">
-                    <div class="card-img" style="background-image: url('${p.img}'), url('store1.jpg')">
-                        <span class="status ${isSold ? 'sold-out' : 'ready'}">${isSold ? 'Habis' : 'Tersedia'}</span>
-                        <span class="stok-badge">Stok: ${p.stok}</span>
+                    <div class="card-img" style="background-image: url('${p.img}')">
+                        <span class="stok-badge">READY: ${p.stok}</span>
                     </div>
                     <div class="card-info">
                         <h3>${p.nama}</h3>
-                        <ul class="specs">${p.desc.map(d => `<li><i class="fas fa-shield-alt"></i> ${d}</li>`).join('')}</ul>
+                        <ul class="specs">${p.desc.map(d => `<li><i class="fas fa-check"></i> ${d}</li>`).join('')}</ul>
                         <p class="price">Rp ${p.harga}</p>
-                        <button class="btn btn-dana" onclick="openDana(${p.id})" ${isSold ? 'disabled' : ''}>
-                            <i class="fas fa-shopping-basket"></i> ${isSold ? 'Stok Kosong' : 'Beli Sekarang'}
+                        <button class="btn btn-buy" onclick="openCheckout(${index})" ${isHabis ? 'disabled' : ''}>
+                            ${isHabis ? 'STOK HABIS' : '<i class="fas fa-shopping-cart"></i> BELI SEKARANG'}
                         </button>
                     </div>
                 </div>`;
         });
     }
 
-    // Modal Logic
-    function openDana(id) {
-        currentItem = dataProduk[id];
-        document.getElementById("modalTitle").innerText = currentItem.nama;
-        const mImg = document.getElementById("modalImg");
-        mImg.src = currentItem.img;
-        mImg.onerror = () => { mImg.src = 'store1.jpg'; }; // Fallback jika gambar 2 rusak
-        
+    function openCheckout(index) {
+        selectedIdx = index;
+        document.getElementById("modalTitle").innerText = products[index].nama;
+        document.getElementById("modalImg").src = products[index].img;
         document.getElementById("danaModal").style.display = "flex";
-        document.getElementById("step1").style.display = "flex";
-        document.getElementById("step2").style.display = "none";
-        document.getElementById("doneBtn").disabled = true;
-        document.body.style.overflow = "hidden"; // Lock scroll
     }
 
-    function closeModal() {
-        document.getElementById("danaModal").style.display = "none";
-        document.body.style.overflow = "auto";
-    }
-
-    function goToStep2() {
-        document.getElementById("step1").style.display = "none";
-        document.getElementById("step2").style.display = "flex";
-    }
-
-    function copyNum() {
-        navigator.clipboard.writeText("081469870881");
-        alert("Nomor DANA berhasil disalin!");
-    }
-
-    function openWA() {
-        const msg = encodeURIComponent(`Halo Garou Store, saya mau beli ${currentItem.nama} (Rp ${currentItem.harga}).\n\nSaya sudah transfer ke DANA, ini bukti transfernya:`);
-        window.open(`https://wa.me/6281469870881?text=${msg}`, "_blank");
-        document.getElementById("doneBtn").disabled = false;
-    }
-
-    // Review Logic
-    function loadReviews() {
-        const reviews = JSON.parse(localStorage.getItem('garou_reviews')) || [];
-        const container = document.getElementById("reviewContainer");
-        if(reviews.length === 0) {
-            container.innerHTML = '<div class="review-card" style="text-align:center; color:#555;">Belum ada ulasan.</div>';
-            return;
+    function processPayment() {
+        if(products[selectedIdx].stok > 0) {
+            products[selectedIdx].stok -= 1;
+            localStorage.setItem('garou_ultimate_db', JSON.stringify(products));
+            renderProducts();
         }
-        container.innerHTML = reviews.map(r => `
-            <div class="review-card">
-                <div style="color:#ffcc00; margin-bottom:5px;">${"★".repeat(r.star)}</div>
-                <div style="font-size:14px; line-height:1.5;">${r.text}</div>
-            </div>
-        `).reverse().join('');
+        window.open(`https://wa.me/6281469870881?text=Halo%20Admin%20Garou%20Store,%20saya%20sudah%20transfer%20DANA%20untuk%20beli%20${encodeURIComponent(products[selectedIdx].nama)}`, "_blank");
+        closeModal();
     }
 
-    function addReview() {
-        const stars = document.querySelector('input[name="star"]:checked');
-        const text = document.getElementById("reviewText").value;
-        if(!stars || text.trim() === "") return alert("Mohon pilih bintang dan tulis ulasan, bro!");
-        
-        const reviews = JSON.parse(localStorage.getItem('garou_reviews')) || [];
-        reviews.push({ star: stars.value, text: text });
-        localStorage.setItem('garou_reviews', JSON.stringify(reviews));
-
-        const waMsg = encodeURIComponent(`Testimoni Baru di Web!\nRating: ${stars.value}/5\nUlasan: "${text}"`);
-        window.open(`https://wa.me/6281469870881?text=${waMsg}`, "_blank");
-        
-        location.reload();
+    // Panel Admin (Password: anakpintar)
+    function loginAdmin() {
+        if(prompt("Masukkan Password Owner:") === "anakpintar") openAdminPanel();
     }
 
+    function openAdminPanel() {
+        const container = document.getElementById("adminList");
+        container.innerHTML = "";
+        products.forEach((p, index) => {
+            container.innerHTML += `
+                <div class="admin-group">
+                    <span style="font-size:12px; font-weight:bold; color:var(--blue)">${p.nama}</span>
+                    <div style="display:flex; gap:10px; margin-top:10px;">
+                        <input type="text" id="editHarga-${index}" value="${p.harga}" class="admin-input" style="width:65%" placeholder="Harga">
+                        <input type="number" id="editStok-${index}" value="${p.stok}" class="admin-input" style="width:35%" placeholder="Stok">
+                    </div>
+                    <button class="btn" style="background:var(--red); color:white; font-size:10px; padding:5px; width:100px" onclick="deleteProduct(${index})">HAPUS BARANG</button>
+                </div>`;
+        });
+        document.getElementById("adminModal").style.display = "flex";
+    }
+
+    function addNewProduct() {
+        const nama = document.getElementById("newNama").value;
+        const harga = document.getElementById("newHarga").value;
+        const stok = parseInt(document.getElementById("newStok").value) || 0;
+        const img = document.getElementById("newImg").value || "store1.png";
+        const desc = document.getElementById("newDesc").value.split(",");
+
+        if(nama && harga) {
+            products.push({ id: Date.now(), nama, harga, stok, img, desc });
+            localStorage.setItem('garou_ultimate_db', JSON.stringify(products));
+            alert("Produk Berhasil Ditambahkan!");
+            document.getElementById("newNama").value = "";
+            document.getElementById("newHarga").value = "";
+            openAdminPanel();
+            renderProducts();
+        }
+    }
+
+    function deleteProduct(index) {
+        if(confirm("Hapus produk ini secara permanen?")) {
+            products.splice(index, 1);
+            localStorage.setItem('garou_ultimate_db', JSON.stringify(products));
+            openAdminPanel();
+            renderProducts();
+        }
+    }
+
+    function saveAdminChanges() {
+        products.forEach((p, index) => {
+            p.harga = document.getElementById(`editHarga-${index}`).value;
+            p.stok = parseInt(document.getElementById(`editStok-${index}`).value) || 0;
+        });
+        localStorage.setItem('garou_ultimate_db', JSON.stringify(products));
+        renderProducts();
+        closeAdmin();
+        alert("Web Berhasil Diperbarui!");
+    }
+
+    // Psikologi Marketing
+    function showFakeNotif() {
+        const msgs = ["Seseorang baru saja membeli Akun!seharga Rp.7000", "Script baru saja terjual!", "Pembayaran DANA berhasil diterima!", "Stok hampir habis, segera order!"];
+        document.getElementById("notifText").innerText = msgs[Math.floor(Math.random()*msgs.length)];
+        const n = document.getElementById("fakeNotif");
+        n.classList.add("show");
+        setTimeout(() => n.classList.remove("show"), 5000);
+    }
+
+    setInterval(showFakeNotif, 18000);
+
+    function closeModal() { document.getElementById("danaModal").style.display = "none"; }
+    function closeAdmin() { document.getElementById("adminModal").style.display = "none"; }
+    function copyNum() { navigator.clipboard.writeText("081469870881"); alert("Nomor DANA Disalin!"); }
+    
     function searchProduct() {
-        let input = document.getElementById("search").value.toLowerCase();
+        let kw = document.getElementById("search").value.toLowerCase();
         document.querySelectorAll(".card").forEach(c => {
-            const name = c.querySelector("h3").innerText.toLowerCase();
-            c.style.display = name.includes(input) ? "flex" : "none";
+            c.style.display = c.querySelector("h3").innerText.toLowerCase().includes(kw) ? "flex" : "none";
         });
     }
 
-    window.onload = () => { displayProducts(); loadReviews(); };
+    window.onload = renderProducts;
 </script>
 </body>
 </html>
