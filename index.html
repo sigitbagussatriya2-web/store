@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garou Store | Cosmic Account Market</title>
+    <title>Garou Store | Blox Fruit Market</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -15,40 +15,49 @@
 
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; overflow-x: hidden; }
 
-        /* Navigasi */
+        /* Navigation */
         nav { display: flex; justify-content: center; padding: 20px; background: #000; border-bottom: 2px solid var(--blue); position: sticky; top: 0; z-index: 1000; }
         .logo { font-weight: 900; font-size: 1.5rem; color: var(--blue); text-shadow: 0 0 15px var(--blue); letter-spacing: 2px; }
 
-        /* Hero */
+        /* Hero Section */
         .hero { text-align: center; padding: 60px 20px; background: radial-gradient(circle at center, #1a0033 0%, var(--bg) 80%); }
-        .hero h1 { font-size: 2.2rem; margin-bottom: 20px; text-shadow: 0 0 10px var(--blue); }
-        .hero input { width: 90%; max-width: 400px; padding: 12px 25px; border-radius: 25px; border: 1px solid #333; background: #111; color: white; outline: none; transition: 0.3s; }
-        .hero input:focus { border-color: var(--blue); box-shadow: 0 0 10px var(--blue); }
+        .hero h1 { font-size: 2.2rem; margin-bottom: 10px; text-shadow: 0 0 10px var(--blue); }
+        .hero input { width: 90%; max-width: 400px; padding: 14px 25px; border-radius: 25px; border: 1px solid #333; background: #111; color: white; outline: none; transition: 0.3s; margin-top: 20px; font-size: 16px; }
+        .hero input:focus { border-color: var(--blue); box-shadow: 0 0 15px var(--blue); }
 
-        /* Grid Produk */
-        .container { padding: 40px 5%; }
+        /* Grid System */
+        .container { padding: 40px 5%; min-height: 50vh; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
         .card { background: var(--card-bg); border-radius: 15px; border: 1px solid #1a1a2e; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; }
         .card:hover { transform: translateY(-10px); border-color: var(--blue); box-shadow: 0 0 20px rgba(0, 163, 255, 0.2); }
-        .card-img { height: 200px; background-size: cover; background-position: center; position: relative; }
-        .stok-badge { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.8); padding: 5px 12px; border-radius: 20px; font-size: 12px; border: 1px solid var(--blue); }
-        .status { position: absolute; top: 10px; right: 10px; padding: 3px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; }
+        
+        .card-img { height: 220px; background-size: cover; background-position: center; position: relative; background-color: #111; }
+        .stok-badge { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.85); padding: 5px 12px; border-radius: 20px; font-size: 12px; border: 1px solid var(--blue); }
+        .status { position: absolute; top: 10px; right: 10px; padding: 4px 12px; border-radius: 5px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
         .status.ready { background: #00ff00; color: #000; }
         .status.sold-out { background: #ff0000; color: white; }
         
         .card-info { padding: 20px; flex-grow: 1; }
-        .price { font-size: 1.6rem; color: var(--blue); font-weight: bold; margin: 10px 0; }
-        .specs { list-style: none; padding: 0; font-size: 14px; color: #ccc; margin-bottom: 20px; }
-        .specs li { margin-bottom: 8px; }
-        .specs i { color: var(--blue); margin-right: 10px; }
+        .price { font-size: 1.8rem; color: var(--blue); font-weight: bold; margin: 10px 0; }
+        .specs { list-style: none; padding: 0; font-size: 14px; color: #ccc; margin-bottom: 20px; min-height: 80px; }
+        .specs li { margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .specs i { color: var(--blue); font-size: 12px; }
 
-        /* Tombol */
-        .btn-group { display: flex; flex-direction: column; gap: 10px; }
-        .btn { padding: 14px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; transition: 0.2s; }
+        /* Buttons */
+        .btn { padding: 14px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; transition: 0.2s; font-size: 14px; width: 100%; box-sizing: border-box; }
         .btn-wa { background: #25d366; color: white; }
         .btn-dana { background: white; color: var(--dana); }
+        .btn:active { transform: scale(0.98); }
         .btn:disabled { background: #222 !important; color: #555 !important; cursor: not-allowed; border: 1px solid #333; }
 
+        /* Modal Overlay */
+        #danaModal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+        .modal-content { background: #111; padding: 25px; border-radius: 20px; text-align: center; border: 1px solid var(--blue); max-width: 380px; width: 100%; position: relative; }
+        .modal-poster { width: 100%; max-height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; border: 1px solid #333; }
+        .num-box { background: #1a1a2e; padding: 15px; border-radius: 10px; margin: 15px 0; font-size: 1.4rem; border: 1px dashed var(--blue); cursor: pointer; color: var(--blue); font-weight: bold; transition: 0.2s; }
+        .num-box:hover { background: #22223d; }
+        .step-box { display: none; flex-direction: column; gap: 12px; }
+        
         /* Rating Section */
         .rating-section { padding: 50px 5%; background: #080810; text-align: center; border-top: 1px solid #111; }
         .rating-input-card { background: #111; padding: 25px; border-radius: 15px; border: 1px dashed var(--blue); max-width: 500px; margin: 0 auto 30px; }
@@ -56,17 +65,12 @@
         .stars input { display: none; }
         .stars label { font-size: 35px; color: #333; cursor: pointer; transition: 0.2s; }
         .stars label:hover, .stars label:hover ~ label, .stars input:checked ~ label { color: #ffcc00; }
-        textarea { width: 100%; background: #000; border: 1px solid #333; color: white; padding: 12px; border-radius: 8px; resize: none; box-sizing: border-box; outline: none; }
+        textarea { width: 100%; background: #000; border: 1px solid #333; color: white; padding: 12px; border-radius: 8px; resize: none; box-sizing: border-box; outline: none; font-family: inherit; }
+        
         .live-reviews { display: grid; gap: 15px; max-width: 800px; margin: 0 auto; text-align: left; }
-        .review-card { background: #0f0f1a; padding: 15px; border-radius: 10px; border-left: 4px solid var(--blue); margin-bottom: 10px; }
+        .review-card { background: #0f0f1a; padding: 15px; border-radius: 10px; border-left: 4px solid var(--blue); }
 
-        /* Modal */
-        #danaModal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: #111; padding: 25px; border-radius: 20px; text-align: center; border: 1px solid var(--blue); max-width: 350px; width: 100%; }
-        .modal-poster { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; border: 1px solid #333; }
-        .num-box { background: #1a1a2e; padding: 15px; border-radius: 10px; margin: 15px 0; font-size: 1.3rem; border: 1px dashed var(--blue); cursor: pointer; color: var(--blue); font-weight: bold; }
-        .step-box { display: none; flex-direction: column; gap: 10px; }
-        footer { text-align: center; padding: 40px; color: #444; font-size: 13px; }
+        footer { text-align: center; padding: 40px; color: #444; font-size: 13px; border-top: 1px solid #111; }
     </style>
 </head>
 <body>
@@ -74,8 +78,9 @@
 <nav><div class="logo">GAROU STORE</div></nav>
 
 <section class="hero">
-    <h1>COSMIC ACCOUNT MARKET BLOX FRUIT 🔥</h1>
-    <input type="text" id="search" placeholder="Cari akun impianmu..." onkeyup="searchProduct()">
+    <h1>BLOX FRUIT MARKET 🔥</h1>
+    <p style="color: #888;">Jual Akun & Script Blox Fruit Aman & Terpercaya</p>
+    <input type="text" id="search" placeholder="Cari produk..." onkeyup="searchProduct()">
 </section>
 
 <div class="container">
@@ -83,7 +88,7 @@
 </div>
 
 <section class="rating-section">
-    <h2>Berikan Ulasan Anda ⭐</h2>
+    <h2>Rating & Testimoni ⭐</h2>
     <div class="rating-input-card">
         <div class="stars">
             <input type="radio" name="star" id="star5" value="5"><label for="star5">★</label>
@@ -92,45 +97,64 @@
             <input type="radio" name="star" id="star2" value="2"><label for="star2">★</label>
             <input type="radio" name="star" id="star1" value="1"><label for="star1">★</label>
         </div>
-        <textarea id="reviewText" rows="3" placeholder="Bagaimana pengalaman belanjamu?"></textarea>
-        <button class="btn btn-wa" style="width:100%; margin-top:15px;" onclick="addReview()">
-            <i class="fas fa-paper-plane"></i> Posting & Kirim ke Admin
+        <textarea id="reviewText" rows="3" placeholder="Gimana belanja di Garou Store? Kasih tahu yang lain!"></textarea>
+        <button class="btn btn-wa" style="margin-top:15px;" onclick="addReview()">
+            <i class="fas fa-paper-plane"></i> Posting Testimoni
         </button>
     </div>
     <div class="live-reviews" id="reviewContainer"></div>
 </section>
 
-<div id="danaModal" onclick="this.style.display='none'">
+<div id="danaModal" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
-        <img src="store1.jpg" alt="Garou Store Poster" class="modal-poster">
-        <h3 id="modalTitle" style="margin: 0 0 15px;">Pembayaran</h3>
+        <img id="modalImg" src="store1.jpg" alt="Produk" class="modal-poster">
+        <h3 id="modalTitle" style="margin: 0 0 15px; color: var(--blue);">Detail Pesanan</h3>
         
         <div id="step1" class="step-box" style="display:flex;">
-            <p style="font-size:14px; color:#ccc;">Transfer ke DANA:</p>
+            <p style="font-size:14px; color:#ccc; margin-bottom:5px;">Silahkan Transfer ke DANA:</p>
             <div class="num-box" onclick="copyNum()">081469870881</div>
-            <p style="font-size:11px; color:var(--blue);">*Klik nomor untuk salin</p>
-            <button class="btn btn-wa" style="background:var(--blue);" onclick="goToStep2()">Sudah Transfer</button>
+            <p style="font-size:11px; color:#888;">(Klik nomor untuk menyalin)</p>
+            <button class="btn btn-wa" style="background:var(--blue);" onclick="goToStep2()">Saya Sudah Transfer</button>
         </div>
 
         <div id="step2" class="step-box">
-            <p style="font-size:14px; color:#ccc;">Wajib kirim bukti transfer ke WhatsApp!</p>
-            <button class="btn btn-wa" onclick="openWA()">Kirim Bukti ke WA</button>
-            <button class="btn" id="doneBtn" onclick="location.reload()" disabled style="background:#ffcc00; color:#000; margin-top:10px;">Selesai & Tutup</button>
+            <p style="font-size:14px; color:#ccc;">Wajib kirim bukti transfer ke Admin untuk klaim produk.</p>
+            <button class="btn btn-wa" onclick="openWA()">
+                <i class="fab fa-whatsapp"></i> Hubungi Admin di WA
+            </button>
+            <button class="btn" id="doneBtn" onclick="location.reload()" disabled style="background:#ffcc00; color:#000; margin-top:10px;">
+                Selesai & Keluar
+            </button>
         </div>
     </div>
 </div>
 
-<footer>© 2026 Garou Store | Awakened by garou 😎</footer>
+<footer>© 2026 Garou Store | @garoustore 😎</footer>
 
 <script>
-    // DATA PRODUK (Update di sini bro)
+    // DATA PRODUK (Pastikan file store1.jpg dan store2.jpg ada di folder yang sama)
     const dataProduk = [
-        { nama: "Akun Blox Fruit Lv 1000", harga: "7.000", img: "https://via.placeholder.com/400x200?text=Blox+Fruit", desc: ["Fruit: Pain, Magma", "Aman 100% Anti HB"], stok: 5 },
-        { nama: "Akun ML Random", harga: "10.000", img: "https://via.placeholder.com/400x200?text=Mobile+Legends", desc: ["Login Moonton", "Skins Epic/Special"], stok: 0 }
+        { 
+            id: 0,
+            nama: "Akun Blox Fruit Lv 1000", 
+            harga: "7.000", 
+            img: "store1.png", 
+            desc: ["Fruit: Pain, Magma", "Aman 100% Anti HB", "Full Akses Akun"], 
+            stok: 2 
+        },
+        { 
+            id: 1,
+            nama: "Script Blox Fruit", 
+            harga: "2.500", 
+            img: "store2.jpg", 
+            desc: ["Auto Farm Level", "Auto Raid & Chest", "Anti-Ban / Safe Script"], 
+            stok: 10 
+        }
     ];
 
-    let currentItemName = "";
+    let currentItem = {};
 
+    // Inisialisasi Produk
     function displayProducts() {
         const list = document.getElementById("productList");
         list.innerHTML = "";
@@ -138,30 +162,40 @@
             const isSold = p.stok <= 0;
             list.innerHTML += `
                 <div class="card">
-                    <div class="card-img" style="background-image: url('${p.img}')">
-                        <span class="status ${isSold ? 'sold-out' : 'ready'}">${isSold ? 'SOLD OUT' : 'READY'}</span>
+                    <div class="card-img" style="background-image: url('${p.img}'), url('store1.jpg')">
+                        <span class="status ${isSold ? 'sold-out' : 'ready'}">${isSold ? 'Habis' : 'Tersedia'}</span>
                         <span class="stok-badge">Stok: ${p.stok}</span>
                     </div>
                     <div class="card-info">
                         <h3>${p.nama}</h3>
-                        <ul class="specs">${p.desc.map(d => `<li><i class="fas fa-check"></i> ${d}</li>`).join('')}</ul>
+                        <ul class="specs">${p.desc.map(d => `<li><i class="fas fa-shield-alt"></i> ${d}</li>`).join('')}</ul>
                         <p class="price">Rp ${p.harga}</p>
-                        <div class="btn-group">
-                            <button class="btn btn-dana" onclick="openDana('${p.nama}')" ${isSold ? 'disabled' : ''}>Beli Sekarang</button>
-                        </div>
+                        <button class="btn btn-dana" onclick="openDana(${p.id})" ${isSold ? 'disabled' : ''}>
+                            <i class="fas fa-shopping-basket"></i> ${isSold ? 'Stok Kosong' : 'Beli Sekarang'}
+                        </button>
                     </div>
                 </div>`;
         });
     }
 
-    // FUNGSI MODAL
-    function openDana(name) {
-        currentItemName = name;
-        document.getElementById("modalTitle").innerText = name;
+    // Modal Logic
+    function openDana(id) {
+        currentItem = dataProduk[id];
+        document.getElementById("modalTitle").innerText = currentItem.nama;
+        const mImg = document.getElementById("modalImg");
+        mImg.src = currentItem.img;
+        mImg.onerror = () => { mImg.src = 'store1.jpg'; }; // Fallback jika gambar 2 rusak
+        
         document.getElementById("danaModal").style.display = "flex";
         document.getElementById("step1").style.display = "flex";
         document.getElementById("step2").style.display = "none";
         document.getElementById("doneBtn").disabled = true;
+        document.body.style.overflow = "hidden"; // Lock scroll
+    }
+
+    function closeModal() {
+        document.getElementById("danaModal").style.display = "none";
+        document.body.style.overflow = "auto";
     }
 
     function goToStep2() {
@@ -175,36 +209,39 @@
     }
 
     function openWA() {
-        const msg = encodeURIComponent(`Halo Garou Store, saya sudah transfer DANA untuk beli ${currentItemName}. Mohon dicek...`);
+        const msg = encodeURIComponent(`Halo Garou Store, saya mau beli ${currentItem.nama} (Rp ${currentItem.harga}).\n\nSaya sudah transfer ke DANA, ini bukti transfernya:`);
         window.open(`https://wa.me/6281469870881?text=${msg}`, "_blank");
         document.getElementById("doneBtn").disabled = false;
     }
 
-    // FUNGSI RATING
+    // Review Logic
     function loadReviews() {
         const reviews = JSON.parse(localStorage.getItem('garou_reviews')) || [];
         const container = document.getElementById("reviewContainer");
+        if(reviews.length === 0) {
+            container.innerHTML = '<div class="review-card" style="text-align:center; color:#555;">Belum ada ulasan.</div>';
+            return;
+        }
         container.innerHTML = reviews.map(r => `
             <div class="review-card">
-                <div style="color:#ffcc00">${"★".repeat(r.star)}</div>
-                <div style="font-size:14px; margin-top:5px;">${r.text}</div>
+                <div style="color:#ffcc00; margin-bottom:5px;">${"★".repeat(r.star)}</div>
+                <div style="font-size:14px; line-height:1.5;">${r.text}</div>
             </div>
-        `).reverse().join('') || '<div class="review-card">Belum ada ulasan.</div>';
+        `).reverse().join('');
     }
 
     function addReview() {
         const stars = document.querySelector('input[name="star"]:checked');
         const text = document.getElementById("reviewText").value;
-        if(!stars || !text) return alert("Bintang dan ulasan wajib diisi!");
-
+        if(!stars || text.trim() === "") return alert("Mohon pilih bintang dan tulis ulasan, bro!");
+        
         const reviews = JSON.parse(localStorage.getItem('garou_reviews')) || [];
         reviews.push({ star: stars.value, text: text });
         localStorage.setItem('garou_reviews', JSON.stringify(reviews));
 
-        const waMsg = encodeURIComponent(`Halo Admin Garou Store, saya kasih rating ${stars.value}/5:\n"${text}"`);
+        const waMsg = encodeURIComponent(`Testimoni Baru di Web!\nRating: ${stars.value}/5\nUlasan: "${text}"`);
         window.open(`https://wa.me/6281469870881?text=${waMsg}`, "_blank");
         
-        document.getElementById("reviewText").value = "";
         location.reload();
     }
 
